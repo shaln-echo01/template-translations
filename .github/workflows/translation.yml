@@ -1,0 +1,68 @@
+name: Template Translation Pipeline
+
+
+on:
+
+  push:
+    branches:
+      - translation/templates
+
+
+  workflow_dispatch:
+
+
+
+jobs:
+
+
+  build-test:
+
+
+    runs-on: ubuntu-latest
+
+
+
+    steps:
+
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ hashFiles('**/pom.xml') }}
+
+
+
+      - name: Build and Test
+        run: mvn clean test
+
+
+
+      - name: Run Template Translator
+        run: mvn spring-boot:run
+
+        env:
+
+          REPOSITORY_PATH:
+            ${{ secrets.REPOSITORY_PATH }}
+
+          GEMINI_API_KEY:
+            ${{ secrets.GEMINI_API_KEY }}
+
+          SLACK_WEBHOOK_URL:
+            ${{ secrets.SLACK_WEBHOOK_URL }}

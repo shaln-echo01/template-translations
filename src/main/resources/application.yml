@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: ed-template-translator
+
+
+translator:
+#	repository-path: /Users/echo-shailendra/Documents/react/react/ed-templates
+  repository-path: ${REPOSITORY_PATH:}
+  templates-path: src/mjml/templates
+  metadata-path: src/mjml/metadata
+
+  supported-languages:
+    - es
+    - fr
+    - id
+    - vi
+    - pt
+    - pt-br
+    - ru
+    - ro
+    - uk
+    - ar
+
+
+gemini:
+  model: ${GEMINI_MODEL:gemini-2.5-flash}
+  api-key: ${GEMINI_API_KEY:}
+
+
+slack:
+  webhook-url: ${SLACK_WEBHOOK_URL:}
+
+
+logging:
+  level:
+    root: INFO
+    com.echo.translator: INFO
